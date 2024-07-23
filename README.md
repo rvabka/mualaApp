@@ -24,17 +24,17 @@ Aplikacja została stworzona z użyciem następujących technologii:
 
 1. Klonuj repozytorium:
 ```bash
-   git clone https://github.com/TwojeRepozytorium/mualaApp.git
+git clone https://github.com/TwojeRepozytorium/mualaApp.git
 ```
   
 2. Przejdź do katalogu projektu:
 ```bash
-    cd mualaApp
+cd mualaApp
 ```
 
 3. Zainstaluj zależności:
 ```bash
-   cd mualaApp
+cd mualaApp
 ```
 
 ## 📍 Przykłady użycia
