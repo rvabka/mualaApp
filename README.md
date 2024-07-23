@@ -23,19 +23,19 @@ Aplikacja została stworzona z użyciem następujących technologii:
 ## 📦 Instalacja
 
 1. Klonuj repozytorium:
-
-   ```bash
+```bash
    git clone https://github.com/TwojeRepozytorium/mualaApp.git
-      
+```
+  
 2. Przejdź do katalogu projektu:
-
 ```bash
     cd mualaApp
 ```
+
 3. Zainstaluj zależności:
-  ```bash
-      cd mualaApp
-  ```
+```bash
+   cd mualaApp
+```
 
 ## 📍 Przykłady użycia
  - **Znajdź punkty w okolicy**: Sprawdź, które miejsca z znacznikiem muala znajdują się w Twojej okolicy.
