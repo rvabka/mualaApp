@@ -1,16 +1,36 @@
-// eslint-disable-next-line no-unused-vars
-import React from 'react';
-import { useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import * as maptilersdk from "@maptiler/sdk";
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import "../../map.css";
 import "../../styles/tailwind.css";
-import { locations } from "../../data";
 import Search from "./Search";
+import { getData } from "../../../useFirebaseData";
+import { InfinitySpin } from "react-loader-spinner";
 
 export default function Map() {
   maptilersdk.config.apiKey = "i10L3MwNCIbub5Dvmg3m";
+
+  // FETCHING DATA
+  const [locations, setLocations] = useState([]);
+  const [loading, setLoading] = useState(true); // Start with loading true
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      setLoading(true);
+      try {
+        const data = await getData();
+        setLocations(data);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLocations();
+  }, []);
+
   const mapContainer = useRef(null);
   const map = useRef(null);
   const poland = { lng: 19.1451, lat: 51.9194 };
@@ -18,7 +38,6 @@ export default function Map() {
   const navigate = useNavigate();
   const location = useLocation();
   const currentLocation = location?.search || "/";
-
   const [searchParams] = useSearchParams();
   const typeFilter = searchParams.getAll("category");
 
@@ -26,10 +45,11 @@ export default function Map() {
     ? locations.filter((item) => typeFilter.includes(item.category))
     : locations;
 
+  // Initialize the map
   useEffect(() => {
-    if (!map.current) {
+    if (!map.current && mapContainer.current) {
       map.current = new maptilersdk.Map({
-        container: mapContainer.current,
+        container: mapContainer.current, // Ensure this is an HTMLElement
         style:
           "https://api.maptiler.com/maps/streets-v2/style.json?key=i10L3MwNCIbub5Dvmg3m",
         center: [poland.lng, poland.lat],
@@ -164,7 +184,7 @@ export default function Map() {
           const { id } = e.features[0].properties;
 
           // Navigate to the location's detail page
-          navigate(`/${id}`, { state: {link: currentLocation}});
+          navigate(`/${id}`, { state: { link: currentLocation } });
         });
 
         map.current.on("mouseenter", "clusters", () => {
@@ -175,13 +195,27 @@ export default function Map() {
         });
       });
     }
-  }, [poland.lng, poland.lat, zoom, navigate, displayedLocation]);
+  }, [displayedLocation, navigate, currentLocation, poland, zoom]);
 
   return (
-    <div className="map-wrap">
-      <div ref={mapContainer} className="map" />
-      <Search typeFilter={typeFilter} />
-      {/* <ThemeToggle /> */}
+    <div className="map-wrap relative transition duration-300">
+      {loading ? (
+        <div className="absolute text-6xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-bold bg-gradient-to-tr from-yellow-500 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
+          {
+            <InfinitySpin
+              visible={true}
+              width="200"
+              color="#F18C18"
+              ariaLabel="infinity-spin-loading"
+            />
+          }
+        </div>
+      ) : (
+        <>
+          <div ref={mapContainer} className="map" />
+          <Search typeFilter={typeFilter} />
+        </>
+      )}
     </div>
   );
 }

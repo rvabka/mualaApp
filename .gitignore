@@ -9,7 +9,7 @@ lerna-debug.log*
 addFirebase.html
 node_modules
 *.local
-
+data.js
 
 # Editor directories and files
 .vscode/*
