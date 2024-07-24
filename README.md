@@ -34,7 +34,7 @@ cd mualaApp
 
 3. Zainstaluj zależności:
 ```bash
-cd mualaApp
+npm install
 ```
 
 ## 📍 Przykłady użycia
